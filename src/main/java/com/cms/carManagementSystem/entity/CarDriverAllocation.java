@@ -1,7 +1,11 @@
 package com.cms.carManagementSystem.entity;
 
-import jakarta.persistence.*;
+import java.util.Date;
 
+import jakarta.persistence.*;
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "driverAllocation")
 public class CarDriverAllocation {
@@ -19,28 +23,14 @@ public class CarDriverAllocation {
 	@JoinColumn(name = "driver_id")
 	private Driver driver;
 
-	public Car getCar() {
-		return car;
-	}
+	@Column(name = "created_it_up", nullable = false, updatable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createdItUp;
 
-	public void setCar(Car car) {
-		this.car = car;
-	}
+	@Column(name = "updated_it_up")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date updatedItUp;
 
-	public Driver getDriver() {
-		return driver;
-	}
-
-	public void setDriver(Driver driver) {
-		this.driver = driver;
-	}
-
-	public Long getCarDriverAllocationId() {
-		return carDriverAllocationId;
-	}
-
-	public void setCarDriverAllocationId(Long carDriverAllocationId) {
-		this.carDriverAllocationId = carDriverAllocationId;
-	}
-	
+	@Column(name = "description", length = 500)
+	private String description;
 }

@@ -1,9 +1,12 @@
 package com.cms.carManagementSystem.entity;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "employee")
 public class Employee {
@@ -22,36 +25,15 @@ public class Employee {
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name = "department_id")
 	private Department department;
+	
+	@Column(name = "created_it_up", nullable = false, updatable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createdItUp;
 
-	public Department getDepartment() {
-		return department;
-	}
+	@Column(name = "updated_it_up")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date updatedItUp;
 
-	public void setDepartment(Department department) {
-		this.department = department;
-	}
-
-	public Long getEmployeeId() {
-		return employeeId;
-	}
-
-	public void setEmployeeId(Long employeeId) {
-		this.employeeId = employeeId;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public BigDecimal getEmployeeRank() {
-		return employeeRank;
-	}
-
-	public void setEmployeeRank(BigDecimal employeeRank) {
-		this.employeeRank = employeeRank;
-	}
+	@Column(name = "description", length = 500)
+	private String description;
 }

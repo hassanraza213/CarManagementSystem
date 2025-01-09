@@ -1,7 +1,11 @@
 package com.cms.carManagementSystem.entity;
 
-import jakarta.persistence.*;
+import java.util.Date;
 
+import jakarta.persistence.*;
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "department")
 public class Department {
@@ -16,28 +20,15 @@ public class Department {
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name = "ministry_id")
 	private Ministry ministry;
+	
+	@Column(name = "created_it_up", nullable = false, updatable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createdItUp;
 
-	public Ministry getMinistry() {
-		return ministry;
-	}
+	@Column(name = "updated_it_up")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date updatedItUp;
 
-	public void setMinistry(Ministry ministry) {
-		this.ministry = ministry;
-	}
-
-	public Long getDepartmentId() {
-		return departmentId;
-	}
-
-	public void setDepartmentId(Long departmentId) {
-		this.departmentId = departmentId;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
+	@Column(name = "description", length = 500)
+	private String description;
 }

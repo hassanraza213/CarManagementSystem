@@ -1,9 +1,12 @@
 package com.cms.carManagementSystem.entity;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "budget")
 public class Budget {
@@ -23,36 +26,14 @@ public class Budget {
 	@JoinColumn(name = "department_id")
 	private Department department;
 
-	public Department getDepartment() {
-		return department;
-	}
+	@Column(name = "created_it_up", nullable = false, updatable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createdItUp;
 
-	public void setDepartment(Department department) {
-		this.department = department;
-	}
+	@Column(name = "updated_it_up")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date updatedItUp;
 
-	public Long getBudgetId() {
-		return budgetId;
-	}
-
-	public void setBudgetId(Long budgetId) {
-		this.budgetId = budgetId;
-	}
-
-	public BigDecimal getNewCarBudget() {
-		return newCarBudget;
-	}
-
-	public void setNewCarBudget(BigDecimal newCarBudget) {
-		this.newCarBudget = newCarBudget;
-	}
-
-	public BigDecimal getMaintenanceBudget() {
-		return maintenanceBudget;
-	}
-
-	public void setMaintenanceBudget(BigDecimal maintenanceBudget) {
-		this.maintenanceBudget = maintenanceBudget;
-	}
-	
+	@Column(name = "description", length = 500)
+	private String description;
 }

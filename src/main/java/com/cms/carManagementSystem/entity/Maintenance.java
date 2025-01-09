@@ -2,9 +2,12 @@ package com.cms.carManagementSystem.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Date;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "maintenance")
 public class Maintenance {
@@ -20,51 +23,22 @@ public class Maintenance {
 	@Column(name = "maintenance_cost")
 	private BigDecimal maintenanceCost;
 	
-	@Column(name = "description")
-	private String description;
+	@Column(name = "maintenance_description")
+	private String maintenance_description;
 	
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name = "car_id")
 	private Car car;
+	
+	@Column(name = "created_it_up", nullable = false, updatable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createdItUp;
 
-	public Car getCar() {
-		return car;
-	}
+	@Column(name = "updated_it_up")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date updatedItUp;
 
-	public void setCar(Car car) {
-		this.car = car;
-	}
-
-	public Long getMaintenanceId() {
-		return maintenanceId;
-	}
-
-	public void setMaintenanceId(Long maintenanceId) {
-		this.maintenanceId = maintenanceId;
-	}
-
-	public LocalDate getMaintenanceDate() {
-		return maintenanceDate;
-	}
-
-	public void setMaintenanceDate(LocalDate maintenanceDate) {
-		this.maintenanceDate = maintenanceDate;
-	}
-
-	public BigDecimal getMaintenanceCost() {
-		return maintenanceCost;
-	}
-
-	public void setMaintenanceCost(BigDecimal maintenanceCost) {
-		this.maintenanceCost = maintenanceCost;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
+	@Column(name = "description", length = 500)
+	private String description;
 
 }

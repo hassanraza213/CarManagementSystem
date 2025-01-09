@@ -1,9 +1,12 @@
 package com.cms.carManagementSystem.entity;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "empcarhistory")
 public class EmpCarHistory {
@@ -27,44 +30,14 @@ public class EmpCarHistory {
 	@JoinColumn(name = "employee_id")
 	private Employee employee;
 
-	public Car getCar() {
-		return car;
-	}
+	@Column(name = "created_it_up", nullable = false, updatable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createdItUp;
 
-	public void setCar(Car car) {
-		this.car = car;
-	}
+	@Column(name = "updated_it_up")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date updatedItUp;
 
-	public Employee getEmployee() {
-		return employee;
-	}
-
-	public void setEmployee(Employee employee) {
-		this.employee = employee;
-	}
-
-	public Long getEmpCarHistoryId() {
-		return empCarHistoryId;
-	}
-
-	public void setEmpCarHistoryId(Long empCarHistoryId) {
-		this.empCarHistoryId = empCarHistoryId;
-	}
-
-	public LocalDate getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(LocalDate startDate) {
-		this.startDate = startDate;
-	}
-
-	public LocalDate getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(LocalDate endDate) {
-		this.endDate = endDate;
-	}
-
+	@Column(name = "description", length = 500)
+	private String description;
 }

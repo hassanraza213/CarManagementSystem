@@ -2,6 +2,7 @@ package com.cms.carManagementSystem.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Date;
 
 import jakarta.persistence.*;
 
@@ -25,45 +26,16 @@ public class Fuel {
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name = "car_id")
 	private Car car;
-
-	public Car getCar() {
-		return car;
-	}
-
-	public void setCar(Car car) {
-		this.car = car;
-	}
-
-	public Long getFuelId() {
-		return fuelId;
-	}
-
-	public void setFuelId(Long fuelId) {
-		this.fuelId = fuelId;
-	}
-
-	public String getFueldType() {
-		return fueldType;
-	}
-
-	public void setFueldType(String fueldType) {
-		this.fueldType = fueldType;
-	}
-
-	public BigDecimal getFuelQuantity() {
-		return fuelQuantity;
-	}
-
-	public void setFuelQuantity(BigDecimal fuelQuantity) {
-		this.fuelQuantity = fuelQuantity;
-	}
-
-	public LocalDate getDate() {
-		return date;
-	}
-
-	public void setDate(LocalDate date) {
-		this.date = date;
-	}
 	
+	@Column(name = "created_it_up", nullable = false, updatable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createdItUp;
+
+	@Column(name = "updated_it_up")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date updatedItUp;
+
+	@Column(name = "description", length = 500)
+	private String description;
+
 }
