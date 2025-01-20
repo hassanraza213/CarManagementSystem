@@ -13,14 +13,14 @@ public class Department {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "department_id")
 	private Long departmentId;
-	
-	@Column(name = "name")
-	private String name;
-	
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "ministry_id")
 	private Ministry ministry;
-	
+
+	@Column(name = "name")
+	private String name;
+
 	@Column(name = "created_it_up", nullable = false, updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdItUp;
@@ -31,4 +31,17 @@ public class Department {
 
 	@Column(name = "description", length = 500)
 	private String description;
+
+	@PrePersist
+	protected void onCreate() {
+		Date currentDate = new Date();
+		this.createdItUp = currentDate;
+		this.updatedItUp = currentDate;
+	}
+
+	@PreUpdate
+	protected void onUpdate() {
+		this.updatedItUp = new Date();
+	}
+
 }
