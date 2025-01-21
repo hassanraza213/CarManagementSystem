@@ -10,22 +10,22 @@ import lombok.Data;
 @Entity
 @Table(name = "employee")
 public class Employee {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "employee_id")
 	private Long employeeId;
-	
+
 	@Column(name = "name")
 	private String name;
-	
+
 	@Column(name = "employee_rank")
 	private BigDecimal employeeRank;
-	
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "department_id")
 	private Department department;
-	
+
 	@Column(name = "created_it_up", nullable = false, updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdItUp;
@@ -36,4 +36,16 @@ public class Employee {
 
 	@Column(name = "description", length = 500)
 	private String description;
+
+	@PrePersist
+	protected void onCreate() {
+		Date currentDate = new Date();
+		this.createdItUp = currentDate;
+		this.updatedItUp = currentDate;
+	}
+
+	@PreUpdate
+	protected void onUpdate() {
+		this.updatedItUp = new Date();
+	}
 }
