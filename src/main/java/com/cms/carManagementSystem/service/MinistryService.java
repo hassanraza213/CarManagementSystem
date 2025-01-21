@@ -23,10 +23,26 @@ public class MinistryService {
 	@Qualifier("modelMapper")
 	@Autowired
 	private ModelMapper modelMapper;
-	
+
 	@Autowired
 	public MinistryService(MinistryRepo ministryRepo) {
 		this.ministryRepo = ministryRepo;
+	}
+
+	public MinistryDTO createMinistry(MinistryDTO ministryDTO) {
+		Ministry ministry = modelMapper.map(ministryDTO, Ministry.class);
+		Ministry savedMinistry = ministryRepo.save(ministry);
+		return modelMapper.map(savedMinistry, MinistryDTO.class);
+	}
+
+	public MinistryDTO updateMinistry(Long id, MinistryDTO ministryDTO) {
+		Ministry updateMinistry = ministryRepo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Ministry not found with id " + id));
+		updateMinistry.setName(ministryDTO.getName());
+		updateMinistry.setAddress(ministryDTO.getAddress());
+		updateMinistry.setDescription(ministryDTO.getDescription());
+		Ministry updatedMinistry = ministryRepo.save(updateMinistry);
+		return modelMapper.map(updatedMinistry, MinistryDTO.class);
 	}
 
 	public List<MinistryDTO> getAllMinistries() {
@@ -39,24 +55,6 @@ public class MinistryService {
 		Ministry ministry = ministryRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Ministry not found with id " + id));
 		return modelMapper.map(ministry, MinistryDTO.class);
-	}
-
-	public MinistryDTO createMinistry(MinistryDTO ministryDTO) {
-		Ministry ministry = modelMapper.map(ministryDTO, Ministry.class);
-		ministry.setCreatedItUp(new Date());
-		Ministry savedMinistry = ministryRepo.save(ministry);
-		return modelMapper.map(savedMinistry, MinistryDTO.class);
-	}
-
-	public MinistryDTO updateMinistry(Long id, MinistryDTO ministryDTO) {
-		Ministry updateMinistry = ministryRepo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Ministry not found with id " + id));
-		updateMinistry.setName(ministryDTO.getName());
-		updateMinistry.setAddress(ministryDTO.getAddress());
-		updateMinistry.setDescription(ministryDTO.getDescription());
-		updateMinistry.setUpdatedItUp(new Date());
-		Ministry updatedMinistry = ministryRepo.save(updateMinistry);
-		return modelMapper.map(updatedMinistry, MinistryDTO.class);
 	}
 
 	public void deleteMinistry(Long id) {
