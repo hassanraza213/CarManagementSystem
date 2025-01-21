@@ -27,7 +27,6 @@ public class DepartmentService {
 
 	private final MinistryRepo ministryRepo;
 
-
 	public DepartmentService(DepartmentRepo departmentRepo, ModelMapper modelMapper, MinistryRepo ministryRepo) {
 		this.departmentRepo = departmentRepo;
 		this.modelMapper = modelMapper;
@@ -36,46 +35,49 @@ public class DepartmentService {
 
 	public DepartmentDTO createDepartment(DepartmentDTO departmentDTO) {
 		Ministry ministry = ministryRepo.findById(departmentDTO.getMinistryId()).orElseThrow(
-				() -> new EntityNotFoundException("Ministry not found with id " + departmentDTO.getMinistryDTO().getMinistryId()));
-		Department createDepartment = modelMapper.map(departmentDTO, Department.class);
-		createDepartment.setMinistry(ministry);
-		System.out.println("Creating department");
-		Department savedDepartment = departmentRepo.save(createDepartment);
-		System.out.println("Department created: " + savedDepartment);
+				() -> new EntityNotFoundException("Ministry not found with id " + departmentDTO.getMinistryId()));
+		Department convertDTOToEntity = modelMapper.map(departmentDTO, Department.class);
+		convertDTOToEntity.setMinistry(ministry);
+		Department savedDepartment = departmentRepo.save(convertDTOToEntity);
 		DepartmentDTO departmentDTO2 = modelMapper.map(savedDepartment, DepartmentDTO.class);
 		departmentDTO2.setMinistryDTO(modelMapper.map(ministry, MinistryDTO.class));
 		return departmentDTO2;
 	}
 
 	public DepartmentDTO updateDepartment(Long id, DepartmentDTO departmentDTO) {
-		Ministry ministry = ministryRepo.findById(departmentDTO.getMinistryDTO().getMinistryId()).orElseThrow(
-				() -> new EntityNotFoundException("Ministry not found with id " + departmentDTO.getMinistryDTO().getMinistryId()));
+		Ministry ministry = ministryRepo.findById(departmentDTO.getMinistryId()).orElseThrow(
+				() -> new EntityNotFoundException("Ministry not found with id " + departmentDTO.getMinistryId()));
 		Department updateDepartment = departmentRepo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Department not found with id " + id));
+				.orElseThrow(() -> new EntityNotFoundException("Department not found with id " + id));
+		modelMapper.map(departmentDTO, updateDepartment);
 		updateDepartment.setMinistry(ministry);
-		updateDepartment.setName(departmentDTO.getName());
-		updateDepartment.setDescription(departmentDTO.getDescription());
 		Department updatedDepartment = departmentRepo.save(updateDepartment);
-		 
-		return modelMapper.map(updatedDepartment, DepartmentDTO.class);
+		DepartmentDTO convertEntityToDTO = modelMapper.map(updatedDepartment, DepartmentDTO.class);
+		convertEntityToDTO.setMinistryDTO(modelMapper.map(ministry, MinistryDTO.class));
+		return convertEntityToDTO;
 	}
 
 	public List<DepartmentDTO> getAllDepartments() {
 		List<Department> allDepartments = departmentRepo.findAll();
-		return allDepartments.stream().map(department -> modelMapper.map(department, DepartmentDTO.class))
-				.collect(Collectors.toList());
+		return allDepartments.stream().map(department -> {
+			DepartmentDTO convertEntityToDTO = modelMapper.map(department, DepartmentDTO.class);
+			convertEntityToDTO.setMinistryDTO(modelMapper.map(department.getMinistry(), MinistryDTO.class));
+			return convertEntityToDTO;
+		}).collect(Collectors.toList());
 	}
 
 	public DepartmentDTO getDepartmentById(Long id) {
 		Department dedpartmentById = departmentRepo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Department not found with id " + id));
-		return modelMapper.map(dedpartmentById, DepartmentDTO.class);
+				.orElseThrow(() -> new EntityNotFoundException("Department not found with id " + id));
+		DepartmentDTO convertEntityToDTO = modelMapper.map(dedpartmentById, DepartmentDTO.class);
+		convertEntityToDTO.setMinistryDTO(modelMapper.map(dedpartmentById.getMinistry(), MinistryDTO.class));
+		return convertEntityToDTO;
 	}
 
 	public void deleteDepartment(Long id) {
 
 		Department deleteDepartment = departmentRepo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Department not found with id" + id));
+				.orElseThrow(() -> new EntityNotFoundException("Department not found with id" + id));
 		departmentRepo.delete(deleteDepartment);
 
 	}

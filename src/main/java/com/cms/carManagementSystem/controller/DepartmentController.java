@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cms.carManagementSystem.dto.DepartmentDTO;
 import com.cms.carManagementSystem.exception.ResourceNotFoundException;
 import com.cms.carManagementSystem.service.DepartmentService;
+
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 
 @RestController
@@ -44,7 +46,7 @@ public class DepartmentController {
 		try {
 			DepartmentDTO updateDepartment = departmentService.updateDepartment(id, departmentDTO);
 			return ResponseEntity.ok(updateDepartment);
-		} catch (ResourceNotFoundException e) {
+		} catch (EntityNotFoundException e) {
 
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
@@ -56,7 +58,7 @@ public class DepartmentController {
 		try {
 			DepartmentDTO departmentByID = departmentService.getDepartmentById(id);
 			return ResponseEntity.ok(departmentByID);
-		} catch (ResourceNotFoundException e) {
+		} catch (EntityNotFoundException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 
 		}
@@ -74,7 +76,7 @@ public class DepartmentController {
 			 departmentService.deleteDepartment(id);
 			 return ResponseEntity.ok("Department with id " +id+ " has been deleted");
 		}
-		catch(Exception e) {
+		catch(EntityNotFoundException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Department with id " +id+ " is not found");
 		}
 	}

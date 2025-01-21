@@ -20,7 +20,7 @@ public class DepartmentDTO {
 	@Size(max = 100, message = "maximum 100 characters allowed")
 	private String name;
 
-	@NotBlank(message = "Name is required")
+	@NotBlank(message = "Description is required")
 	@Size(max = 200, message = "maximum 200 characters allowed")
 	private String description;
 }
