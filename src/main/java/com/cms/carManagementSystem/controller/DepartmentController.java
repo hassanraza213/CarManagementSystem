@@ -34,10 +34,8 @@ public class DepartmentController {
 
 	@PostMapping
 	public ResponseEntity<DepartmentDTO> createDepartment(@Valid @RequestBody DepartmentDTO departmentDTO) {
-
 		DepartmentDTO createDepartment = departmentService.createDepartment(departmentDTO);
 		return new ResponseEntity<>(createDepartment, HttpStatus.CREATED);
-
 	}
 
 	@PutMapping("/{id}")
@@ -47,22 +45,18 @@ public class DepartmentController {
 			DepartmentDTO updateDepartment = departmentService.updateDepartment(id, departmentDTO);
 			return ResponseEntity.ok(updateDepartment);
 		} catch (EntityNotFoundException e) {
-
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<DepartmentDTO> getDepartmentById(@PathVariable Long id) {
-
 		try {
 			DepartmentDTO departmentByID = departmentService.getDepartmentById(id);
 			return ResponseEntity.ok(departmentByID);
 		} catch (EntityNotFoundException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-
 		}
-
 	}
 
 	@GetMapping
@@ -71,13 +65,12 @@ public class DepartmentController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deleteDeparmentById(@PathVariable Long id){
+	public ResponseEntity<String> deleteDeparmentById(@PathVariable Long id) {
 		try {
-			 departmentService.deleteDepartment(id);
-			 return ResponseEntity.ok("Department with id " +id+ " has been deleted");
-		}
-		catch(EntityNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Department with id " +id+ " is not found");
+			departmentService.deleteDepartment(id);
+			return ResponseEntity.ok("Department with id " + id + " has been deleted");
+		} catch (EntityNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Department with id " + id + " is not found");
 		}
 	}
 }

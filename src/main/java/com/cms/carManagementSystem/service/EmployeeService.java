@@ -78,5 +78,4 @@ public class EmployeeService {
 		Employee deleteEmployee = employeeRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Employee not found with id "+id));
 		employeeRepo.delete(deleteEmployee);
 	}
-
 }

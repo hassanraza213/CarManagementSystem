@@ -1,8 +1,5 @@
 package com.cms.carManagementSystem.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +8,6 @@ import com.cms.carManagementSystem.dto.DepartmentDTO;
 import com.cms.carManagementSystem.dto.MinistryDTO;
 import com.cms.carManagementSystem.entity.Department;
 import com.cms.carManagementSystem.entity.Ministry;
-import com.cms.carManagementSystem.exception.ResourceNotFoundException;
 import com.cms.carManagementSystem.repository.DepartmentRepo;
 import com.cms.carManagementSystem.repository.MinistryRepo;
 
@@ -67,18 +63,16 @@ public class DepartmentService {
 	}
 
 	public DepartmentDTO getDepartmentById(Long id) {
-		Department dedpartmentById = departmentRepo.findById(id)
+		Department departmentById = departmentRepo.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Department not found with id " + id));
-		DepartmentDTO convertEntityToDTO = modelMapper.map(dedpartmentById, DepartmentDTO.class);
-		convertEntityToDTO.setMinistryDTO(modelMapper.map(dedpartmentById.getMinistry(), MinistryDTO.class));
+		DepartmentDTO convertEntityToDTO = modelMapper.map(departmentById, DepartmentDTO.class);
+		convertEntityToDTO.setMinistryDTO(modelMapper.map(departmentById.getMinistry(), MinistryDTO.class));
 		return convertEntityToDTO;
 	}
 
 	public void deleteDepartment(Long id) {
-
 		Department deleteDepartment = departmentRepo.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Department not found with id" + id));
 		departmentRepo.delete(deleteDepartment);
-
 	}
 }

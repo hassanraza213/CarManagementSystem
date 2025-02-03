@@ -9,39 +9,39 @@ import lombok.Data;
 @Entity
 @Table(name = "department")
 public class Department {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "department_id")
-	private Long departmentId;
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	@JoinColumn(name = "ministry_id")
-	private Ministry ministry;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "department_id")
+    private Long departmentId;
 
-	@Column(name = "name")
-	private String name;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "ministry_id")
+    private Ministry ministry;
 
-	@Column(name = "created_it_up", nullable = false, updatable = false)
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date createdItUp;
+    @Column(name = "name")
+    private String name;
 
-	@Column(name = "updated_it_up")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date updatedItUp;
+    @Column(name = "created_it_up", nullable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdItUp;
 
-	@Column(name = "description", length = 500)
-	private String description;
+    @Column(name = "updated_it_up")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedItUp;
 
-	@PrePersist
-	protected void onCreate() {
-		Date currentDate = new Date();
-		this.createdItUp = currentDate;
-		this.updatedItUp = currentDate;
-	}
+    @Column(name = "description", length = 500)
+    private String description;
 
-	@PreUpdate
-	protected void onUpdate() {
-		this.updatedItUp = new Date();
-	}
+    @PrePersist
+    protected void onCreate() {
+        Date currentDate = new Date();
+        this.createdItUp = currentDate;
+        this.updatedItUp = currentDate;
+    }
 
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedItUp = new Date();
+    }
 }

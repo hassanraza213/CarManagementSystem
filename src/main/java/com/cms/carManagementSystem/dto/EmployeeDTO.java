@@ -12,20 +12,20 @@ import lombok.Data;
 @Data
 public class EmployeeDTO {
 
-	private Long employeeId;
+    private Long employeeId;
 
-	@JsonProperty("department")
-	private DepartmentDTO departmentDTO;
-	
-	private Long departmentId;
+    @JsonProperty("department")
+    private DepartmentDTO departmentDTO;
 
-	@NotBlank(message = "Name is required")
-	@Size(max = 100, message = "maximum 100 characters allowed")
-	private String name;
+    private Long departmentId;
 
-	@NotNull(message = "Employee rank is required")
-	private BigDecimal employeeRank;
+    @NotBlank(message = "Name is required")
+    @Size(max = 100, message = "maximum 100 characters allowed")
+    private String name;
 
-	@Size(max = 100, message = "maximum 100 characters allowed")
-	private String description;
+    @NotNull(message = "Employee rank is required")
+    private BigDecimal employeeRank;
+
+    @Size(max = 100, message = "maximum 100 characters allowed")
+    private String description;
 }

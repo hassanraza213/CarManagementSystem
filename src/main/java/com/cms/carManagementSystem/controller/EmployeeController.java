@@ -67,7 +67,7 @@ public class EmployeeController {
 	public ResponseEntity<String> deleteEmployeeById(@PathVariable Long id) {
 		try {
 			employeeService.deleteEmployeeById(id);
-			return ResponseEntity.ok("Emplpyee with id" + id + " has been deleted");
+			return ResponseEntity.ok("Employee with id " + id + " has been deleted");
 		} catch (EntityNotFoundException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee with id " + id + " is not found");
 		}
