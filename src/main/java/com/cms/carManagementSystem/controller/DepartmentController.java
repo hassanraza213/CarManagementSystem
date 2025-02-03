@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cms.carManagementSystem.dto.DepartmentDTO;
-import com.cms.carManagementSystem.exception.ResourceNotFoundException;
 import com.cms.carManagementSystem.service.DepartmentService;
 
 import jakarta.persistence.EntityNotFoundException;

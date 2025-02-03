@@ -13,6 +13,9 @@ import com.cms.carManagementSystem.repository.MinistryRepo;
 
 import jakarta.persistence.EntityNotFoundException;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class DepartmentService {
 
