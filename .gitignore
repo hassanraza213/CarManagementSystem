@@ -68,7 +68,7 @@ target/
 # Ignoring unnecessary files
 .mvn
 .settings
-src
+src/
 .factorypath
 .gitattributes
 HELP.md
@@ -106,3 +106,12 @@ buildNumber.properties
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# Allow specific packages inside src
+!src/main/java/com/cms/carManagementSystem/controller/
+!src/main/java/com/cms/carManagementSystem/service/
+!src/main/java/com/cms/carManagementSystem/dto/
+!src/main/java/com/cms/carManagementSystem/repository/
+
+# Ignore everything else inside src
+src/*

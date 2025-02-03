@@ -9,6 +9,7 @@ import lombok.Data;
 @Entity
 @Table(name = "department")
 public class Department {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "department_id")
@@ -43,5 +44,4 @@ public class Department {
     protected void onUpdate() {
         this.updatedItUp = new Date();
     }
-
 }

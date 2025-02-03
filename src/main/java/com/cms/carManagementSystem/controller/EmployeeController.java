@@ -2,7 +2,6 @@ package com.cms.carManagementSystem.controller;
 
 import java.util.List;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,67 +22,54 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/employees")
-@Slf4j
 public class EmployeeController {
 
-    @Autowired
-    private final EmployeeService employeeService;
+	@Autowired
+	private final EmployeeService employeeService;
 
-    public EmployeeController(EmployeeService employeeService) {
-        this.employeeService = employeeService;
-    }
+	public EmployeeController(EmployeeService employeeService) {
+		this.employeeService = employeeService;
+	}
 
-    @PostMapping
-    public ResponseEntity<EmployeeDTO> createEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
-        log.info("Adding employee {}", employeeDTO);
-        EmployeeDTO createEmployeeDTO = employeeService.createEmployee(employeeDTO);
-        log.info("Employee added successfully {}", createEmployeeDTO);
-        return new ResponseEntity<>(createEmployeeDTO, HttpStatus.CREATED);
-    }
+	@PostMapping
+	public ResponseEntity<EmployeeDTO> createEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
+		EmployeeDTO createEmployeeDTO = employeeService.createEmployee(employeeDTO);
+		return new ResponseEntity<>(createEmployeeDTO, HttpStatus.CREATED);
+	}
 
-    @PutMapping("/{id}")
-    public ResponseEntity<EmployeeDTO> updateEmployee(@PathVariable Long id,
-                                                      @Valid @RequestBody EmployeeDTO employeeDTO) {
-        log.info("Getting employee with Id: {}", id);
-        try {
-            EmployeeDTO updateEmployeeDTO = employeeService.updateEmployee(id, employeeDTO);
-            log.info("Employee with id {} details updated successfully", updateEmployeeDTO);
-            return ResponseEntity.ok(updateEmployeeDTO);
-        } catch (EntityNotFoundException e) {
-            log.error("Employee not found with Id: {]", id);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-    }
+	@PutMapping("/{id}")
+	public ResponseEntity<EmployeeDTO> updateEmployee(@PathVariable Long id,
+			@Valid @RequestBody EmployeeDTO employeeDTO) {
+		try {
+			EmployeeDTO updateEmployeeDTO = employeeService.updateEmployee(id, employeeDTO);
+			return ResponseEntity.ok(updateEmployeeDTO);
+		} catch (EntityNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+	}
 
-    @GetMapping("/{id}")
-    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Long id) {
-        log.info("Fetching employee with Id: {}", id);
-        try {
-            EmployeeDTO employeeByIdDTO = employeeService.getEmployeeById(id);
-            log.info("Employee found with Id: {}", id);
-            return ResponseEntity.ok(employeeByIdDTO);
-        } catch (EntityNotFoundException e) {
-            log.error("Employee not found with Id: {}", id);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-    }
+	@GetMapping("/{id}")
+	public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Long id) {
+		try {
+			EmployeeDTO employeeByIdDTO = employeeService.getEmployeeById(id);
+			return ResponseEntity.ok(employeeByIdDTO);
+		} catch (EntityNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+	}
 
-    @GetMapping
-    public List<EmployeeDTO> getAllEmployees() {
-        log.info("Fetching all employees");
-        return employeeService.getAllEmployees();
-    }
+	@GetMapping
+	public List<EmployeeDTO> getAllEmployees() {
+		return employeeService.getAllEmployees();
+	}
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteEmployeeById(@PathVariable Long id) {
-        log.info("Attempting to delete employee with Id: {}", id);
-        try {
-            employeeService.deleteEmployeeById(id);
-            log.info("Employee with Id {} deleted successfully", id);
-            return ResponseEntity.ok("Employee with id" + id + " has been deleted");
-        } catch (EntityNotFoundException e) {
-            log.error("Employee not found with Id: {}", id);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee with id " + id + " is not found");
-        }
-    }
+	@DeleteMapping("/{id}")
+	public ResponseEntity<String> deleteEmployeeById(@PathVariable Long id) {
+		try {
+			employeeService.deleteEmployeeById(id);
+			return ResponseEntity.ok("Employee with id " + id + " has been deleted");
+		} catch (EntityNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee with id " + id + " is not found");
+		}
+	}
 }

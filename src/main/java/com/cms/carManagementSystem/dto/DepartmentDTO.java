@@ -9,18 +9,18 @@ import lombok.Data;
 @Data
 public class DepartmentDTO {
 
-    private Long departmentId;
+	private Long departmentId;
+	
+	@JsonProperty("ministry")
+	private MinistryDTO ministryDTO;
+	
+	private Long ministryId;
 
-    @JsonProperty("ministry")
-    private MinistryDTO ministryDTO;
+	@NotBlank(message = "Name is required")
+	@Size(max = 100, message = "maximum 100 characters allowed")
+	private String name;
 
-    private Long ministryId;
-
-    @NotBlank(message = "Name is required")
-    @Size(max = 100, message = "maximum 100 characters allowed")
-    private String name;
-
-    @NotBlank(message = "Description is required")
-    @Size(max = 200, message = "maximum 200 characters allowed")
-    private String description;
+	@NotBlank(message = "Description is required")
+	@Size(max = 200, message = "maximum 200 characters allowed")
+	private String description;
 }
