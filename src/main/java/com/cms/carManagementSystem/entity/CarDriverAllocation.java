@@ -33,4 +33,16 @@ public class CarDriverAllocation {
 
 	@Column(name = "description", length = 500)
 	private String description;
+
+	@PrePersist
+	protected void onCreate() {
+		Date currentDate = new Date();
+		this.createdItUp = currentDate;
+		this.updatedItUp = currentDate;
+	}
+
+	@PreUpdate
+	protected void onUpdate() {
+		this.updatedItUp = new Date();
+	}
 }

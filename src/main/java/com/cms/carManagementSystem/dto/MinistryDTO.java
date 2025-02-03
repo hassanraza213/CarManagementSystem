@@ -6,16 +6,16 @@ import lombok.Data;
 @Data
 public class MinistryDTO {
 
-	private Long ministryId;
+    private Long ministryId;
 
-	@NotBlank(message = "Name is required")
-	@Size(max = 100, message = "Name can't exceed 100 Characters")
-	private String name;
+    @NotBlank(message = "Name is required")
+    @Size(max = 100, message = "Name can't exceed 100 Characters")
+    private String name;
 
-	@NotBlank(message = "Address is required")
-	@Size(max = 200, message = "Name can't exceed 200 Characters")
-	private String address;
+    @NotBlank(message = "Address is required")
+    @Size(max = 200, message = "Name can't exceed 200 Characters")
+    private String address;
 
-	@Size(max = 500, message = "Name can't exceed 500 Characters")
-	private String description;
+    @Size(max = 500, message = "Name can't exceed 500 Characters")
+    private String description;
 }

@@ -5,39 +5,39 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "user")
 public class User {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "user_id")
-	private Long userId;
-	
-	@Column(name = "username")
-	private String userName;
-	
-	@Column(name = "password")
-	private String password;
 
-	public Long getUserId() {
-		return userId;
-	}
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    private Long userId;
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
+    @Column(name = "username")
+    private String userName;
 
-	public String getUserName() {
-		return userName;
-	}
+    @Column(name = "password")
+    private String password;
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+    public Long getUserId() {
+        return userId;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
