@@ -30,98 +30,146 @@ public class EmpCarHistoryService {
     }
 
     public EmpCarHistoryDTO createEmpCarHistory(EmpCarHistoryDTO empCarHistoryDTO) {
-        if (empCarHistoryDTO.getStartDate() != null && empCarHistoryDTO.getEndDate() != null) {
-            if (empCarHistoryDTO.getStartDate().isAfter(empCarHistoryDTO.getEndDate())) {
-                throw new IllegalArgumentException("Start date cannot be after end date");
-            }
-        }
+        Employee employee = employeeRepo.findById(empCarHistoryDTO.getEmployeeId()).orElseThrow(() -> {
+            log.error("Employee not found with ID: {}", empCarHistoryDTO.getEmployeeId());
+            return new EntityNotFoundException("Employee not found with Id: " + empCarHistoryDTO.getEmployeeId());
+        });
 
-        Employee employee = employeeRepo.findById(empCarHistoryDTO.getEmployeeId()).orElseThrow(() -> new EntityNotFoundException("Employee not found"));
-        Car car = carRepo.findById(empCarHistoryDTO.getCarId()).orElseThrow(() -> new EntityNotFoundException("Car not found"));
+        Car car = carRepo.findById(empCarHistoryDTO.getCarId()).orElseThrow(() -> {
+            log.error("Car not found with ID: {}", empCarHistoryDTO.getCarId());
+            return new EntityNotFoundException("Car not found with Id: " + empCarHistoryDTO.getCarId());
+        });
 
-        EmpCarHistory empCarHistory = modelMapper.map(empCarHistoryDTO, EmpCarHistory.class);
-        empCarHistory.setEmployee(employee);
-        empCarHistory.setCar(car);
+        EmpCarHistory convertEmpCarHistoryDTOToEntity = modelMapper.map(empCarHistoryDTO, EmpCarHistory.class);
+        convertEmpCarHistoryDTOToEntity.setEmployee(employee);
+        convertEmpCarHistoryDTOToEntity.setCar(car);
 
-        // Set start date and end date explicitly
-        if (empCarHistoryDTO.getStartDate() != null) {
-            empCarHistory.setStartDate(empCarHistoryDTO.getStartDate());
-        }
-        if (empCarHistoryDTO.getEndDate() != null) {
-            empCarHistory.setEndDate(empCarHistoryDTO.getEndDate());
-        }
+        EmpCarHistory saveEmpCarHistory = empCarHistoryRepo.save(convertEmpCarHistoryDTOToEntity);
+        EmpCarHistoryDTO convertEmpCarHistoryEntityToDTO = modelMapper.map(saveEmpCarHistory, EmpCarHistoryDTO.class);
 
-        EmpCarHistory savedEmpCarHistory = empCarHistoryRepo.save(empCarHistory);
+        convertEmpCarHistoryEntityToDTO.setEmployeeId(employee.getEmployeeId());
+        convertEmpCarHistoryEntityToDTO.setCarId(car.getCarId());
 
-        EmpCarHistoryDTO result = modelMapper.map(savedEmpCarHistory, EmpCarHistoryDTO.class);
-        result.setEmployeeId(employee.getEmployeeId());
-        result.setCarId(car.getCarId());
-        result.setEmployeeDTO(modelMapper.map(employee, EmployeeDTO.class));
-        result.setCarDTO(modelMapper.map(car, CarDTO.class));
+        EmployeeDTO employeeDTO = modelMapper.map(employee, EmployeeDTO.class);
+        Department department = employee.getDepartment();
+        DepartmentDTO departmentDTO = modelMapper.map(department, DepartmentDTO.class);
+        departmentDTO.setMinistryDTO(modelMapper.map(department.getMinistry(), MinistryDTO.class));
+        employeeDTO.setDepartmentDTO(departmentDTO);
+        convertEmpCarHistoryEntityToDTO.setEmployeeDTO(employeeDTO);
 
-        return result;
+        CarDTO carDTO = modelMapper.map(car, CarDTO.class);
+        Department carDepartment = car.getDepartment();
+        DepartmentDTO carDepartmentDTO = modelMapper.map(carDepartment, DepartmentDTO.class);
+        carDepartmentDTO.setMinistryDTO(modelMapper.map(carDepartment.getMinistry(), MinistryDTO.class));
+        carDTO.setDepartmentDTO(carDepartmentDTO);
+        convertEmpCarHistoryEntityToDTO.setCarDTO(carDTO);
+
+        log.info("Car with id {} history added for Employee with id {}", empCarHistoryDTO.getCarId(), empCarHistoryDTO.getEmployeeId());
+        return convertEmpCarHistoryEntityToDTO;
     }
 
     public EmpCarHistoryDTO updateEmpCarHistoryDetails(Long id, EmpCarHistoryDTO empCarHistoryDTO) {
-        if (empCarHistoryDTO.getStartDate() != null && empCarHistoryDTO.getEndDate() != null) {
-            if (empCarHistoryDTO.getStartDate().isAfter(empCarHistoryDTO.getEndDate())) {
-                throw new IllegalArgumentException("Start date cannot be after end date");
-            }
-        }
+        EmpCarHistory existingHistory = empCarHistoryRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("History not found"));
 
-        EmpCarHistory existingEmpCarHistory = empCarHistoryRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("History not found"));
-        Employee employee = employeeRepo.findById(empCarHistoryDTO.getEmployeeId()).orElseThrow(() -> new EntityNotFoundException("Employee not found"));
-        Car car = carRepo.findById(empCarHistoryDTO.getCarId()).orElseThrow(() -> new EntityNotFoundException("Car not found"));
+        Employee employee = employeeRepo.findById(empCarHistoryDTO.getEmployeeId()).orElseThrow(() -> {
+            log.error("Employee not found with ID: {}", empCarHistoryDTO.getEmployeeId());
+            return new EntityNotFoundException("Employee not found with Id: " + empCarHistoryDTO.getEmployeeId());
+        });
 
-        modelMapper.map(empCarHistoryDTO, existingEmpCarHistory);
-        existingEmpCarHistory.setEmployee(employee);
-        existingEmpCarHistory.setCar(car);
+        Car car = carRepo.findById(empCarHistoryDTO.getCarId()).orElseThrow(() -> {
+            log.error("Car not found with ID: {}", empCarHistoryDTO.getCarId());
+            return new EntityNotFoundException("Car not found with Id: " + empCarHistoryDTO.getCarId());
+        });
 
-        // Set start date and end date explicitly
-        if (empCarHistoryDTO.getStartDate() != null) {
-            existingEmpCarHistory.setStartDate(empCarHistoryDTO.getStartDate());
-        }
-        if (empCarHistoryDTO.getEndDate() != null) {
-            existingEmpCarHistory.setEndDate(empCarHistoryDTO.getEndDate());
-        }
+        modelMapper.getConfiguration().setSkipNullEnabled(true);
+        modelMapper.map(empCarHistoryDTO, existingHistory);
+        existingHistory.setEmployee(employee);
+        existingHistory.setCar(car);
 
-        EmpCarHistory updatedEmpCarHistory = empCarHistoryRepo.save(existingEmpCarHistory);
+        EmpCarHistory saveEmpCarHistory = empCarHistoryRepo.save(existingHistory);
 
-        EmpCarHistoryDTO result = modelMapper.map(updatedEmpCarHistory, EmpCarHistoryDTO.class);
-        result.setEmployeeId(employee.getEmployeeId());
-        result.setCarId(car.getCarId());
-        result.setEmployeeDTO(modelMapper.map(employee, EmployeeDTO.class));
-        result.setCarDTO(modelMapper.map(car, CarDTO.class));
+        EmpCarHistoryDTO updatedDTO = modelMapper.map(saveEmpCarHistory, EmpCarHistoryDTO.class);
+        updatedDTO.setEmployeeId(employee.getEmployeeId());
+        updatedDTO.setCarId(car.getCarId());
 
-        return result;
+        EmployeeDTO employeeDTO = modelMapper.map(employee, EmployeeDTO.class);
+        Department department = employee.getDepartment();
+        DepartmentDTO departmentDTO = modelMapper.map(department, DepartmentDTO.class);
+        departmentDTO.setMinistryDTO(modelMapper.map(department.getMinistry(), MinistryDTO.class));
+        employeeDTO.setDepartmentDTO(departmentDTO);
+        updatedDTO.setEmployeeDTO(employeeDTO);
+
+        CarDTO carDTO = modelMapper.map(car, CarDTO.class);
+        Department carDepartment = car.getDepartment();
+        DepartmentDTO carDepartmentDTO = modelMapper.map(carDepartment, DepartmentDTO.class);
+        carDepartmentDTO.setMinistryDTO(modelMapper.map(carDepartment.getMinistry(), MinistryDTO.class));
+        carDTO.setDepartmentDTO(carDepartmentDTO);
+        updatedDTO.setCarDTO(carDTO);
+
+        return updatedDTO;
     }
 
     public EmpCarHistoryDTO getEmpCarHistoryDetailsById(Long id) {
-        EmpCarHistory empCarHistory = empCarHistoryRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("History not found"));
+        EmpCarHistory existingHistory = empCarHistoryRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("History not found"));
 
-        EmpCarHistoryDTO result = modelMapper.map(empCarHistory, EmpCarHistoryDTO.class);
-        result.setEmployeeId(empCarHistory.getEmployee().getEmployeeId());
-        result.setCarId(empCarHistory.getCar().getCarId());
-        result.setEmployeeDTO(modelMapper.map(empCarHistory.getEmployee(), EmployeeDTO.class));
-        result.setCarDTO(modelMapper.map(empCarHistory.getCar(), CarDTO.class));
+        EmpCarHistoryDTO convertEmpCarHistoryEntityToDTO = modelMapper.map(existingHistory, EmpCarHistoryDTO.class);
 
-        return result;
+        convertEmpCarHistoryEntityToDTO.setEmployeeId(existingHistory.getEmployee().getEmployeeId());
+        convertEmpCarHistoryEntityToDTO.setCarId(existingHistory.getCar().getCarId());
+
+        Employee employee = existingHistory.getEmployee();
+        EmployeeDTO employeeDTO = modelMapper.map(employee, EmployeeDTO.class);
+        Department department = employee.getDepartment();
+        DepartmentDTO departmentDTO = modelMapper.map(department, DepartmentDTO.class);
+        departmentDTO.setMinistryDTO(modelMapper.map(department.getMinistry(), MinistryDTO.class));
+        employeeDTO.setDepartmentDTO(departmentDTO);
+        convertEmpCarHistoryEntityToDTO.setEmployeeDTO(employeeDTO);
+
+        Car car = existingHistory.getCar();
+        CarDTO carDTO = modelMapper.map(car, CarDTO.class);
+        Department carDepartment = car.getDepartment();
+        DepartmentDTO carDepartmentDTO = modelMapper.map(carDepartment, DepartmentDTO.class);
+        carDepartmentDTO.setMinistryDTO(modelMapper.map(carDepartment.getMinistry(), MinistryDTO.class));
+        carDTO.setDepartmentDTO(carDepartmentDTO);
+        convertEmpCarHistoryEntityToDTO.setCarDTO(carDTO);
+
+        return convertEmpCarHistoryEntityToDTO;
     }
 
     public List<EmpCarHistoryDTO> getAllEmpCarHistoryDetails() {
-        List<EmpCarHistory> historyList = empCarHistoryRepo.findAll();
-        return historyList.stream().map(empCarHistory -> {
-            EmpCarHistoryDTO result = modelMapper.map(empCarHistory, EmpCarHistoryDTO.class);
-            result.setEmployeeId(empCarHistory.getEmployee().getEmployeeId());
-            result.setCarId(empCarHistory.getCar().getCarId());
-            result.setEmployeeDTO(modelMapper.map(empCarHistory.getEmployee(), EmployeeDTO.class));
-            result.setCarDTO(modelMapper.map(empCarHistory.getCar(), CarDTO.class));
-            return result;
+        List<EmpCarHistory> empCarHistoryList = empCarHistoryRepo.findAll();
+        return empCarHistoryList.stream().map(empCarHistory -> {
+            EmpCarHistoryDTO convertEmpCarHistoryEntityToDTO = modelMapper.map(empCarHistory, EmpCarHistoryDTO.class);
+
+            convertEmpCarHistoryEntityToDTO.setEmployeeId(empCarHistory.getEmployee().getEmployeeId());
+            convertEmpCarHistoryEntityToDTO.setCarId(empCarHistory.getCar().getCarId());
+
+            Employee employee = empCarHistory.getEmployee();
+            EmployeeDTO employeeDTO = modelMapper.map(employee, EmployeeDTO.class);
+            Department department = employee.getDepartment();
+            DepartmentDTO departmentDTO = modelMapper.map(department, DepartmentDTO.class);
+            departmentDTO.setMinistryDTO(modelMapper.map(department.getMinistry(), MinistryDTO.class));
+            employeeDTO.setDepartmentDTO(departmentDTO);
+            convertEmpCarHistoryEntityToDTO.setEmployeeDTO(employeeDTO);
+
+            Car car = empCarHistory.getCar();
+            CarDTO carDTO = modelMapper.map(car, CarDTO.class);
+            Department carDepartment = car.getDepartment();
+            DepartmentDTO carDepartmentDTO = modelMapper.map(carDepartment, DepartmentDTO.class);
+            carDepartmentDTO.setMinistryDTO(modelMapper.map(carDepartment.getMinistry(), MinistryDTO.class));
+            carDTO.setDepartmentDTO(carDepartmentDTO);
+            convertEmpCarHistoryEntityToDTO.setCarDTO(carDTO);
+
+            return convertEmpCarHistoryEntityToDTO;
         }).collect(Collectors.toList());
     }
 
     public void deleteEmpCarHistoryDetails(Long id) {
-        EmpCarHistory empCarHistory = empCarHistoryRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("History not found"));
-        empCarHistoryRepo.delete(empCarHistory);
+        EmpCarHistory deleteEmpCarHistory = empCarHistoryRepo.findById(id).orElseThrow(() -> {
+            log.error("Employee car history details not found with Id: {}", id);
+            return new EntityNotFoundException("Employee car history details not found with Id: " + id);
+        });
+        empCarHistoryRepo.delete(deleteEmpCarHistory);
+        log.info("Employee car history details with Id {} deleted successfully", id);
     }
 }
