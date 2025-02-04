@@ -68,7 +68,6 @@ target/
 # Ignoring unnecessary files
 .mvn
 .settings
-src/
 .factorypath
 .gitattributes
 HELP.md
@@ -108,10 +107,13 @@ hs_err_pid*
 replay_pid*
 
 # Allow specific packages inside src
+!src/
+!src/main/
+!src/main/java/
+!src/main/java/com/
+!src/main/java/com/cms/
+!src/main/java/com/cms/carManagementSystem/
 !src/main/java/com/cms/carManagementSystem/controller/
 !src/main/java/com/cms/carManagementSystem/service/
 !src/main/java/com/cms/carManagementSystem/dto/
 !src/main/java/com/cms/carManagementSystem/repository/
-
-# Ignore everything else inside src
-src/*
