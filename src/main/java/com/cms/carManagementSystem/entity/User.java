@@ -1,7 +1,11 @@
 package com.cms.carManagementSystem.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+import java.util.Date;
+
+@Data
 @Entity
 @Table(name = "user")
 public class User {
@@ -17,27 +21,27 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    public Long getUserId() {
-        return userId;
+    @Column(name = "created_it_up", nullable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdItUp;
+
+    @Column(name = "updated_it_up")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedItUp;
+
+    @Column(name = "description", length = 500)
+    private String description;
+
+    @PrePersist
+    protected void onCreate() {
+        Date currentDate = new Date();
+        this.createdItUp = currentDate;
+        this.updatedItUp = currentDate;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedItUp = new Date();
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }
