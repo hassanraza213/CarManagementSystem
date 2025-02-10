@@ -13,9 +13,9 @@ public class MinistryDTO {
     private String name;
 
     @NotBlank(message = "Address is required")
-    @Size(max = 200, message = "Name can't exceed 200 Characters")
+    @Size(max = 200, message = "address can't exceed 200 Characters")
     private String address;
 
-    @Size(max = 500, message = "Name can't exceed 500 Characters")
+    @Size(max = 500, message = "description can't exceed 500 Characters")
     private String description;
 }
