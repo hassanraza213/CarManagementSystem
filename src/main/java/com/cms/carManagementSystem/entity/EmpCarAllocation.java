@@ -14,11 +14,11 @@ public class EmpCarAllocation {
     @Column(name = "carAllocation_id")
     private Long empCarAllocationId;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "car_id")
     private Car car;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "employee_id")
     private Employee employee;
 

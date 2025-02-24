@@ -15,7 +15,7 @@ public class Car {
     @Column(name = "car_id")
     private Long carId;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "department_id")
     private Department department;
 

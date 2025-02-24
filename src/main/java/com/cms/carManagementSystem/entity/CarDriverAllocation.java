@@ -15,11 +15,11 @@ public class CarDriverAllocation {
 	@Column(name = "driverAllocation_id")
 	private Long carDriverAllocationId;
 	
-	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@OneToOne(cascade = {CascadeType.MERGE})
 	@JoinColumn(name = "car_id")
 	private Car car;
 	
-	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@OneToOne(cascade = {CascadeType.MERGE})
 	@JoinColumn(name = "driver_id")
 	private Driver driver;
 

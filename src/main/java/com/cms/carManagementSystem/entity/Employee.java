@@ -16,7 +16,7 @@ public class Employee {
     @Column(name = "employee_id")
     private Long employeeId;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "department_id")
     private Department department;
 
