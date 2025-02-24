@@ -25,7 +25,7 @@ import lombok.Data;
 		@Column(name = "date")
 		private LocalDate date;
 
-		@ManyToOne(cascade = CascadeType.PERSIST)
+		@ManyToOne(cascade = CascadeType.MERGE)
 		@JoinColumn(name = "car_id")
 		private Car car;
 	

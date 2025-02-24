@@ -22,11 +22,11 @@ public class CarDriverHistory {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "car_id")
     private Car car;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "driver_id")
     private Driver driver;
 

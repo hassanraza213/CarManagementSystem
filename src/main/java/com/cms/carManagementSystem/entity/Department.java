@@ -15,7 +15,7 @@ public class Department {
     @Column(name = "department_id")
     private Long departmentId;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "ministry_id")
     private Ministry ministry;
 

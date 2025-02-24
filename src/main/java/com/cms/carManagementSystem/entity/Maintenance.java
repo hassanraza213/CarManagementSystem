@@ -26,7 +26,7 @@ public class Maintenance {
 	@Column(name = "maintenance_description")
 	private String maintenance_description;
 	
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToOne(cascade = {CascadeType.MERGE})
 	@JoinColumn(name = "car_id")
 	private Car car;
 	

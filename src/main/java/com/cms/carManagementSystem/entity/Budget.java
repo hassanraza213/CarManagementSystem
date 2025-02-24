@@ -22,7 +22,7 @@ public class Budget {
 	@Column(name = "maintenance_budget")
 	private BigDecimal maintenanceBudget;
 	
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToOne(cascade = {CascadeType.MERGE})
 	@JoinColumn(name = "department_id")
 	private Department department;
 
