@@ -4,13 +4,13 @@ import com.cms.carManagementSystem.entity.Car;
 import com.cms.carManagementSystem.entity.Fuel;
 import com.cms.carManagementSystem.repository.CarRepo;
 import com.cms.carManagementSystem.repository.FuelRepo;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import net.datafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;

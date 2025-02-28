@@ -1,8 +1,13 @@
 package com.cms.carManagementSystem.service;
 
 import com.cms.carManagementSystem.dto.*;
-import com.cms.carManagementSystem.entity.*;
-import com.cms.carManagementSystem.repository.*;
+import com.cms.carManagementSystem.entity.Car;
+import com.cms.carManagementSystem.entity.CarDriverAllocation;
+import com.cms.carManagementSystem.entity.Department;
+import com.cms.carManagementSystem.entity.Driver;
+import com.cms.carManagementSystem.repository.CarDriverAllocationRepo;
+import com.cms.carManagementSystem.repository.CarRepo;
+import com.cms.carManagementSystem.repository.DriverRepo;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;

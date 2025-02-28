@@ -54,6 +54,6 @@ public class EmpCarAllocatoinController {
     public ResponseEntity<String> deleteEmpCarAllocation(@PathVariable Long id) {
         log.info("Deleting employee car allocation with ID: {}", id);
         empCarAllocationService.deleteEmpCarAllocationDetails(id);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("employee car allocation details not found with Id "+id);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("employee car allocation details not found with Id " + id);
     }
 }
