@@ -1,36 +1,41 @@
 package com.cms.carManagementSystem.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.cms.carManagementSystem.dto.UserDTO;
+import com.cms.carManagementSystem.entity.User;
+import com.cms.carManagementSystem.repository.UserRepo;
+import com.cms.carManagementSystem.util.JwtUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.cms.carManagementSystem.dto.UserDTO;
-import com.cms.carManagementSystem.entity.User;
-import com.cms.carManagementSystem.repository.UserRepo;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class UserService {
 
     private final UserRepo userRepo;
+    private final ModelMapper modelMapper;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
-    @Qualifier("modelMapper")
     @Autowired
-    private ModelMapper modelMapper;
-
-    public UserService(UserRepo userRepo) {
+    public UserService(UserRepo userRepo, @Qualifier("modelMapper") ModelMapper modelMapper, JwtUtil jwtUtil) {
         this.userRepo = userRepo;
+        this.modelMapper = modelMapper;
+        this.jwtUtil = jwtUtil;
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     public UserDTO createUser(UserDTO userDTO) {
         log.info("Creating a new user with details: {}", userDTO);
         User user = modelMapper.map(userDTO, User.class);
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         User savedUser = userRepo.save(user);
         log.info("User created successfully with ID: {}", savedUser.getUserId());
         return modelMapper.map(savedUser, UserDTO.class);
@@ -79,5 +84,19 @@ public class UserService {
                 });
         userRepo.delete(delUser);
         log.info("User deleted successfully with ID: {}", id);
+    }
+
+    public UserDTO login(String userName, String password) {
+        log.info("Attempting login for username : {}", userName);
+        User user = userRepo.findByUserName(userName).orElseThrow(() -> {
+            log.error("User not found with username : {}", userName);
+            return new EntityNotFoundException("User not found with username " + userName);
+        });
+        if(!passwordEncoder.matches(password, user.getPassword())){
+            log.error("Invalid password for username: {}", userName);
+            throw new IllegalArgumentException("Invalid password");
+        }
+        log.info("Login successful for username: {}", userName);
+        return modelMapper.map(user, UserDTO.class);
     }
 }

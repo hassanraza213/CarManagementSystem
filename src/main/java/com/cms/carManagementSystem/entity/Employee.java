@@ -1,10 +1,10 @@
 package com.cms.carManagementSystem.entity;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 @Data
 @Entity

@@ -1,9 +1,9 @@
 package com.cms.carManagementSystem.entity;
 
-import java.util.Date;
-
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.Date;
 
 @Data
 @Entity

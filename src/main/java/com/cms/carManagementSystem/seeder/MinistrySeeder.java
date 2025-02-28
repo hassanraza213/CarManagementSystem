@@ -2,14 +2,13 @@ package com.cms.carManagementSystem.seeder;
 
 import com.cms.carManagementSystem.entity.Ministry;
 import com.cms.carManagementSystem.repository.MinistryRepo;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import net.datafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.annotation.PostConstruct;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
