@@ -24,7 +24,7 @@ public class UserSeeder {
     private Faker faker;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder; // Inject BCryptPasswordEncoder
+    private BCryptPasswordEncoder passwordEncoder;
 
     @PostConstruct
     @Transactional
@@ -32,9 +32,12 @@ public class UserSeeder {
         userRepo.saveAll(
                 IntStream.range(0, 10)
                         .mapToObj(i -> {
+                            String userName = faker.name().username();
+                            String plainPassword = faker.internet().password();
+                            log.info("Seeding user {} with plain password: {}", userName, plainPassword);
                             User user = new User();
-                            user.setUserName(faker.name().username());
-                            user.setPassword(passwordEncoder.encode(faker.internet().password())); // Hash the password
+                            user.setUserName(userName);
+                            user.setPassword(passwordEncoder.encode(plainPassword)); // Hash the password
                             user.setDescription(faker.lorem().paragraph(2));
                             return user;
                         })
