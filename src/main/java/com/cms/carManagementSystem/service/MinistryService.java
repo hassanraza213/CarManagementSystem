@@ -1,21 +1,17 @@
 package com.cms.carManagementSystem.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import jakarta.persistence.EntityNotFoundException;
-import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
-import org.slf4j.ILoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.cms.carManagementSystem.dto.MinistryDTO;
 import com.cms.carManagementSystem.entity.Ministry;
 import com.cms.carManagementSystem.repository.MinistryRepo;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service

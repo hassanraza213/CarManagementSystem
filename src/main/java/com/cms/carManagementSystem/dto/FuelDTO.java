@@ -1,6 +1,5 @@
 package com.cms.carManagementSystem.dto;
 
-import com.cms.carManagementSystem.entity.Car;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
 import lombok.Data;

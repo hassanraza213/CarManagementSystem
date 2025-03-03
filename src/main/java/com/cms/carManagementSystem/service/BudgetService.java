@@ -1,20 +1,18 @@
 package com.cms.carManagementSystem.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.cms.carManagementSystem.dto.BudgetDTO;
 import com.cms.carManagementSystem.dto.DepartmentDTO;
 import com.cms.carManagementSystem.entity.Budget;
 import com.cms.carManagementSystem.entity.Department;
 import com.cms.carManagementSystem.repository.BudgetRepo;
 import com.cms.carManagementSystem.repository.DepartmentRepo;
-
 import jakarta.persistence.EntityNotFoundException;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BudgetService {
@@ -75,7 +73,7 @@ public class BudgetService {
     }
 
     public void deleteBudgetById(Long id) {
-        Budget deleteBudget = budgetRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Budget not found with id "+id));
+        Budget deleteBudget = budgetRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Budget not found with id " + id));
         budgetRepo.delete(deleteBudget);
     }
 }

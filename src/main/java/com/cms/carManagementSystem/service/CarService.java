@@ -31,51 +31,51 @@ public class CarService {
         this.departmentRepo = departmentRepo;
     }
 
-    public CarDTO createCar(CarDTO carDTO){
-        log.info("Adding a new car with details : "+carDTO);
-        Department department = departmentRepo.findById(carDTO.getDepartmentId()).orElseThrow(()-> {
-            log.error("Department not found with Id: {}",carDTO.getDepartmentId());
-            return new EntityNotFoundException("Department not found with Id "+carDTO.getDepartmentId());
+    public CarDTO createCar(CarDTO carDTO) {
+        log.info("Adding a new car with details : " + carDTO);
+        Department department = departmentRepo.findById(carDTO.getDepartmentId()).orElseThrow(() -> {
+            log.error("Department not found with Id: {}", carDTO.getDepartmentId());
+            return new EntityNotFoundException("Department not found with Id " + carDTO.getDepartmentId());
         });
 
         Car convertDTOToEntity = modelMapper.map(carDTO, Car.class);
         convertDTOToEntity.setDepartment(department);
 
-        log.info("Saving car : {}",convertDTOToEntity);
+        log.info("Saving car : {}", convertDTOToEntity);
         Car savedCar = carRepo.save(convertDTOToEntity);
 
         CarDTO convertEntityToDTO = modelMapper.map(savedCar, CarDTO.class);
         convertEntityToDTO.setDepartmentDTO(modelMapper.map(department, DepartmentDTO.class));
-        log.info("Car added with Id: {}",savedCar.getCarId());
-        return  convertEntityToDTO;
+        log.info("Car added with Id: {}", savedCar.getCarId());
+        return convertEntityToDTO;
     }
 
-    public CarDTO updateCar(Long id, CarDTO carDTO){
-        log.info("fetching department with Id: {}",id);
-        Department department = departmentRepo.findById(carDTO.getDepartmentId()).orElseThrow(()-> {
-            log.error("Department not found with Id: {}",carDTO.getDepartmentId());
-            return new EntityNotFoundException("Department not found with Id: "+carDTO.getDepartmentId());
+    public CarDTO updateCar(Long id, CarDTO carDTO) {
+        log.info("fetching department with Id: {}", id);
+        Department department = departmentRepo.findById(carDTO.getDepartmentId()).orElseThrow(() -> {
+            log.error("Department not found with Id: {}", carDTO.getDepartmentId());
+            return new EntityNotFoundException("Department not found with Id: " + carDTO.getDepartmentId());
         });
 
-        Car updateCar = carRepo.findById(id).orElseThrow(()-> {
-            log.error("Car not found with Id: {}",id);
-            return new EntityNotFoundException("Car not found with Id : "+id);
+        Car updateCar = carRepo.findById(id).orElseThrow(() -> {
+            log.error("Car not found with Id: {}", id);
+            return new EntityNotFoundException("Car not found with Id : " + id);
         });
 
-        log.info("Mapping DTO to Entity: {}",updateCar);
+        log.info("Mapping DTO to Entity: {}", updateCar);
         modelMapper.map(carDTO, updateCar);
         updateCar.setDepartment(department);
 
-        log.info("Updated car details {}",updateCar);
+        log.info("Updated car details {}", updateCar);
         Car updatedCar = carRepo.save(updateCar);
 
         CarDTO convertEntityTODTO = modelMapper.map(updatedCar, CarDTO.class);
         convertEntityTODTO.setDepartmentDTO(modelMapper.map(department, DepartmentDTO.class));
-        log.info("Car details updated with the Id: {}",convertEntityTODTO);
+        log.info("Car details updated with the Id: {}", convertEntityTODTO);
         return convertEntityTODTO;
     }
 
-    public List<CarDTO> GetAllCars(){
+    public List<CarDTO> GetAllCars() {
         log.info("Fetching all the cars");
         List<Car> carList = carRepo.findAll();
         List<CarDTO> carDTOList = carList.stream().map(car -> {
@@ -86,34 +86,34 @@ public class CarService {
             convertEntityToDTO.setDepartmentDTO(departmentDTO);
             return convertEntityToDTO;
         }).collect(Collectors.toList());
-        log.info("Retrieved {} Cars ",carDTOList.size());
+        log.info("Retrieved {} Cars ", carDTOList.size());
         return carDTOList;
     }
 
-    public CarDTO getCarById(Long id){
-        log.info("Fetching car with Id : ",id);
-        Car carById = carRepo.findById(id).orElseThrow(()-> {
-            log.error("Car not found with Id: {}",id);
-            return new EntityNotFoundException("Car not found with the Id: "+id);
+    public CarDTO getCarById(Long id) {
+        log.info("Fetching car with Id : ", id);
+        Car carById = carRepo.findById(id).orElseThrow(() -> {
+            log.error("Car not found with Id: {}", id);
+            return new EntityNotFoundException("Car not found with the Id: " + id);
         });
 
-        CarDTO convertEntityToDTO = modelMapper.map(carById,CarDTO.class);
+        CarDTO convertEntityToDTO = modelMapper.map(carById, CarDTO.class);
         Department department = carById.getDepartment();
         DepartmentDTO departmentDTO = modelMapper.map(department, DepartmentDTO.class);
         departmentDTO.setMinistryDTO(modelMapper.map(department.getMinistry(), MinistryDTO.class));
         convertEntityToDTO.setDepartmentDTO(departmentDTO);
-        log.info("Car found {}",carById.getCarMake());
+        log.info("Car found {}", carById.getCarMake());
         return convertEntityToDTO;
     }
 
-    public void deleteById(Long id){
-        log.info("Attempting to delete the car with Id: {}",id);
-        Car deleteCar = carRepo.findById(id).orElseThrow(()->{
-            log.error("Car not found with Id: {}",id);
-            return new EntityNotFoundException("Car not found with Id: "+id);
+    public void deleteById(Long id) {
+        log.info("Attempting to delete the car with Id: {}", id);
+        Car deleteCar = carRepo.findById(id).orElseThrow(() -> {
+            log.error("Car not found with Id: {}", id);
+            return new EntityNotFoundException("Car not found with Id: " + id);
         });
 
         carRepo.delete(deleteCar);
-        log.info("Car with Id {} deleted successfully",id);
+        log.info("Car with Id {} deleted successfully", id);
     }
 }

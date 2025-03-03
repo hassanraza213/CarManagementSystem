@@ -1,4 +1,4 @@
-    package com.cms.carManagementSystem.config;
+package com.cms.carManagementSystem.config;
 
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
