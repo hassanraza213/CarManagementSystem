@@ -42,7 +42,7 @@ public class AuthController {
             cookie.setHttpOnly(true);
             cookie.setSecure(true);
             cookie.setPath("/");
-            cookie.setMaxAge((int) (jwtUtil.EXPIRATION_TIME / 1000));
+            cookie.setMaxAge((int) (jwtUtil.getExpirationTime() / 1000));
             httpServletResponse.addCookie(cookie);
             log.info("Login successful, JWT cookie set for username: {}", loginRequest.getUserName());
             return ResponseEntity.ok("Login successful");
