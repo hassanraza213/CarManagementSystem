@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,7 @@ public class UserService {
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public UserDTO createUser(UserDTO userDTO) {
         log.info("Creating a new user with details: {}", userDTO);
         User user = modelMapper.map(userDTO, User.class);
@@ -41,6 +43,7 @@ public class UserService {
         return modelMapper.map(savedUser, UserDTO.class);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public UserDTO updateUser(Long id, UserDTO userDTO) {
         log.info("Updating user with ID: {}", id);
         User updateUser = userRepo.findById(id)
@@ -56,6 +59,7 @@ public class UserService {
         return modelMapper.map(updatedUser, UserDTO.class);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public List<UserDTO> getAllUsers() {
         log.info("Fetching all users");
         List<User> allUsers = userRepo.findAll();
@@ -64,6 +68,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public UserDTO getUserById(Long id) {
         log.info("Fetching user with ID: {}", id);
         User user = userRepo.findById(id)
@@ -75,6 +80,7 @@ public class UserService {
         return modelMapper.map(user, UserDTO.class);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void deleteUser(Long id) {
         log.info("Deleting user with ID: {}", id);
         User delUser = userRepo.findById(id)

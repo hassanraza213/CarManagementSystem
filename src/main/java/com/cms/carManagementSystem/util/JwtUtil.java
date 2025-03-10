@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Slf4j
@@ -30,15 +31,26 @@ public class JwtUtil {
         key = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
-    public String generateToken(String userName) {
+    public String generateToken(String userName, List<String> authorities) {
         log.info("Generating JWT for username: {}", userName);
-        return Jwts.builder().subject(userName).issuedAt(new Date()).expiration(new Date(System.currentTimeMillis() + expirationTime)).signWith(key).compact();
+        return Jwts.builder()
+                .subject(userName)
+                .claim("authorities", authorities) // Add authorities to JWT
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + expirationTime))
+                .signWith(key)
+                .compact();
     }
 
     public String extractUsername(String token) {
         log.info("Extracting username from JWT");
         Claims claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
         return claims.getSubject();
+    }
+
+    public Claims getClaims(String token) {
+        log.info("Extracting claims from JWT");
+        return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
     }
 
     public boolean validateToken(String token) {
