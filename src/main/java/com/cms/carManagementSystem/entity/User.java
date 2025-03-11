@@ -3,7 +3,9 @@ package com.cms.carManagementSystem.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -14,6 +16,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long userId;
+
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE})
+    private List<UserRoles> userRoles = new ArrayList<>();
 
     @Column(name = "username")
     private String userName;
