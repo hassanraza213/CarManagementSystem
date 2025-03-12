@@ -3,31 +3,30 @@ package com.cms.carManagementSystem.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
-@Table(name = "user_roles")
-public class UserRoles {
-
+@Table(name = "roles")
+public class Roles {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_role_id")
-    private Long userRoleId;
+    @Column(name = "role_id")
+    private Long roleId;
 
-    @ManyToOne(cascade = {CascadeType.MERGE})
-    @JoinColumn(name = "user_id")
-    private User user;
+    @OneToMany(mappedBy = "role", cascade = {CascadeType.MERGE})
+    private List<UserRoles> userRoles = new ArrayList<>();
 
-    @ManyToOne(cascade = {CascadeType.MERGE})
-    @JoinColumn(name = "role_id")
-    private Roles roles;
+    @Column(name = "role_name", nullable = false, unique = true)
+    private String roleName;
 
-    @Column(name = "create_it_up", nullable = false, updatable = false)
+    @Column(name = "created_it_up", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdItUp;
 
-    @Column(name = "update_it_up")
+    @Column(name = "updated_it_up")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedItUp;
 
@@ -41,6 +40,7 @@ public class UserRoles {
         this.updatedItUp = currentDate;
     }
 
+    @PreUpdate
     protected void onUpdate() {
         this.updatedItUp = new Date();
     }

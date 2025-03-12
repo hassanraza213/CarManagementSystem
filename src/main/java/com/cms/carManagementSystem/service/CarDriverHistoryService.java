@@ -52,11 +52,9 @@ public class CarDriverHistoryService {
         CarDriverHistory savedCarDriverHistory = carDriverHistoryRepo.save(carDriverHistoryEntity);
         CarDriverHistoryDTO carDriverHistoryDTOResponse = modelMapper.map(savedCarDriverHistory, CarDriverHistoryDTO.class);
 
-        // Manually set driverId and carId
         carDriverHistoryDTOResponse.setDriverId(driver.getDriverId());
         carDriverHistoryDTOResponse.setCarId(car.getCarId());
 
-        // Map Driver and include Department + Ministry
         DriverDTO driverDTO = modelMapper.map(driver, DriverDTO.class);
         Department driverDepartment = driver.getDepartment();
         DepartmentDTO driverDepartmentDTO = modelMapper.map(driverDepartment, DepartmentDTO.class);
@@ -64,7 +62,6 @@ public class CarDriverHistoryService {
         driverDTO.setDepartmentDTO(driverDepartmentDTO);
         carDriverHistoryDTOResponse.setDriverDTO(driverDTO);
 
-        // Map Car and include Department + Ministry
         CarDTO carDTO = modelMapper.map(car, CarDTO.class);
         Department carDepartment = car.getDepartment();
         DepartmentDTO carDepartmentDTO = modelMapper.map(carDepartment, DepartmentDTO.class);
