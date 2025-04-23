@@ -1,5 +1,6 @@
 package com.cms.carManagementSystem.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -14,6 +15,7 @@ public class UserDTO {
 
     @NotBlank(message = "Password is required")
     @Size(min = 8, max = 50, message = "password can't exceed 50 Characters")
+    @JsonIgnore
     private String password;
 
     @Size(max = 500, message = "description can't exceed 500 Characters")
