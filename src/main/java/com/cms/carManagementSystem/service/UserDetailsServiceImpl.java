@@ -11,7 +11,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -19,6 +22,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private UserRolesService userRolesService;
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
@@ -28,10 +34,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("User not found with username: " + userName);
         });
 
-        // Temporary authorities (e.g., based on a role or permission logic)
-        List<SimpleGrantedAuthority> authorities = List.of(
-                new SimpleGrantedAuthority("ROLE_USER")
-        );
+        List<String> roleNames = userRolesService.getRolesByUserId(user.getUserId());
+
+        Set<String> permissions = new HashSet<>();
+        for (String roleName : roleNames) {
+            List<String> rolePermissions = userRolesService.getPermissionsByRoleName(roleName);
+            permissions.addAll(rolePermissions);
+        }
+
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        authorities.addAll(roleNames.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet()));
+        authorities.addAll(permissions.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet()));
 
         return new org.springframework.security.core.userdetails.User(
                 user.getUserName(),

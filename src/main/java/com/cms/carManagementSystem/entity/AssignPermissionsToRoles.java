@@ -3,28 +3,25 @@ package com.cms.carManagementSystem.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Entity
-@Table(name = "roles")
-public class Roles {
+@Table(name = "assignpermissions_toroles")
+public class AssignPermissionsToRoles {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "role_id")
-    private Long roleId;
+    @Column(name = "assign_id")
+    private Long assignId;
 
-    @OneToMany(mappedBy = "roles", cascade = {CascadeType.MERGE})
-    private List<UserRoles> userRoles = new ArrayList<>();
+    @ManyToOne(cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "role_id", nullable = false)
+    private Roles roles;
 
-    @ManyToMany
-    @JoinTable(name = "assignpermissions_toroles", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
-    private List<Permissions> permissions = new ArrayList<>();
-
-    @Column(name = "role_name", nullable = false, unique = true)
-    private String roleName;
+    @ManyToOne(cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "permission_id", nullable = false)
+    private Permissions permissions;
 
     @Column(name = "created_it_up", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
